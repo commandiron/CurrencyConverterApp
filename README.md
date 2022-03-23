@@ -13,6 +13,7 @@ Native Android simple currency converter application written in Kotlin using Jet
 
 * Tech-stack ⚛️
     * [Kotlin](https://kotlinlang.org/) + [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) - perform background operation
+    * [Retrofit](https://square.github.io/retrofit/)
     * [Hilt](https://github.com/google/dagger) - DI
     * [Jetpack](https://developer.android.com/jetpack)
         * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) - store and manage UI-related data in a lifecycle conscious way
