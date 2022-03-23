@@ -6,7 +6,7 @@ Native Android simple currency converter application written in Kotlin using Jet
 
 |Screen|
 |----------------------|
-|<img src="https://user-images.githubusercontent.com/50905347/149989855-935385d6-7eac-4f86-a2cd-ade90bcd0aa8.gif" width="1000" height="550">|
+|<img src="https://user-images.githubusercontent.com/50905347/149989855-935385d6-7eac-4f86-a2cd-ade90bcd0aa8.gif" width="1000" height="500">|
 
 * Application - Features ☕
    * Language - English
