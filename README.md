@@ -1,4 +1,4 @@
-# CurrencyConverter_app_by_command3
+# CurrencyConverterApp
 
 Native Android simple currency converter application written in Kotlin using Jetpack Compose with Retrofit library.
 
