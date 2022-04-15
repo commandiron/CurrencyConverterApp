@@ -9,6 +9,8 @@ import javax.inject.Inject
 class ConverterRepositoryImpl @Inject constructor(private val api: ConverterAPI): ConverterRepository {
     override suspend fun getConvertResult(base_currency: String): Resource<ResponseFromApi> {
 
+        Resource.Loading(null)
+
         val response = try {
             api.getConvertResult(Constants.API_KEY,base_currency)
         }catch (e: Exception){

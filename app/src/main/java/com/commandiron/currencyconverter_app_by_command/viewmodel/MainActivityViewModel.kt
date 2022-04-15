@@ -32,17 +32,12 @@ class MainActivityViewModel @Inject constructor(
             when(result){
 
                 is Resource.Success -> {
-
                     allCurrencyList.value = listOf(SELECT_CURRENCY_STRING) + result.data!!.data.keys.toList().sortedDescending().reversed()
                 }
 
-                is Resource.Error -> {
+                is Resource.Error -> {}
 
-                }
-
-                is Resource.Loading -> {
-
-                }
+                is Resource.Loading -> {}
             }
         }
     }
@@ -59,7 +54,6 @@ class MainActivityViewModel @Inject constructor(
                         val roundResult = result.data!!.data[selectedCurrencyForMap]!!.times(multiple)
                         multipledResult.value = String.format(CURRENCY_FORMAT,roundResult)
                     }
-
                     is Resource.Error -> {
                     }
 

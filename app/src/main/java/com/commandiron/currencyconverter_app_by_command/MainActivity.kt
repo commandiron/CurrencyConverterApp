@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandIn
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
@@ -23,11 +24,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.commandiron.currencyconverter_app_by_command.ui.theme.CurrencyConverter_app_by_commandTheme
+import com.commandiron.currencyconverter_app_by_command.ui.theme.myBackGround
 import com.commandiron.currencyconverter_app_by_command.util.Constants
 import com.commandiron.currencyconverter_app_by_command.util.Constants.APP_NAME
 import com.commandiron.currencyconverter_app_by_command.viewmodel.CurrencyEvent
 import com.commandiron.currencyconverter_app_by_command.viewmodel.MainActivityViewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.format.TextStyle
 
 
 @AndroidEntryPoint
@@ -46,6 +50,13 @@ class MainActivity: ComponentActivity() {
 @Composable
 fun SetUi(viewModel: MainActivityViewModel = hiltViewModel()) {
 
+    val systemUiController = rememberSystemUiController()
+
+    systemUiController.setSystemBarsColor(
+        color = myBackGround,
+        darkIcons = true
+    )
+
     val allCurrencyList by remember {viewModel.allCurrencyList}
     val resultForCurrency by remember { viewModel.multipledResult}
     
@@ -53,33 +64,47 @@ fun SetUi(viewModel: MainActivityViewModel = hiltViewModel()) {
         color = MaterialTheme.colors.background,
         modifier = Modifier.fillMaxSize()
     ){
-        Column(horizontalAlignment = Alignment.CenterHorizontally){
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterVertically),
+            modifier = Modifier.padding(bottom = 100.dp)){
 
             var baseCurrency by remember { mutableStateOf("")}
             var selectedCurrencyForConvert by remember { mutableStateOf("")}
             var multiplierForConvert by remember { mutableStateOf("1.00")}
             
             Text(text = APP_NAME,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
+                modifier = Modifier,
                 textAlign = TextAlign.Center,
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.primary)
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp)
 
-            Box(modifier = Modifier.padding(10.dp),
-                contentAlignment = Alignment.Center) {
-                Row() {
-                    DropdownDemo(allCurrencyList){
-                        if(it != Constants.SELECT_CURRENCY_STRING){
-                            baseCurrency = it
-                        }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                DropdownDemo(allCurrencyList){
+                    if(it != Constants.SELECT_CURRENCY_STRING){
+                        baseCurrency = it
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
+                }
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                Box(modifier = Modifier
+                    .border(1.dp, Color.Gray)) {
                     BasicTextField(
+                        textStyle = androidx.compose.ui.text.TextStyle(
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Center
+                        ),
+                        modifier = Modifier
+                            .width(160.dp)
+                            .background(Color.White)
+                            .padding(10.dp),
                         value = multiplierForConvert,
                         onValueChange = {
                             multiplierForConvert = it},
@@ -88,8 +113,6 @@ fun SetUi(viewModel: MainActivityViewModel = hiltViewModel()) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
             Button(
                 onClick = {
                     viewModel.getMultipledResultForQuery(
@@ -97,48 +120,44 @@ fun SetUi(viewModel: MainActivityViewModel = hiltViewModel()) {
                         selectedCurrencyForConvert,
                         multiplierForConvert.toDouble())
                           },
-
-                modifier = Modifier.fillMaxWidth()) {
+                modifier = Modifier.width(100.dp)) {
                 Text(text = "Swap")
             }
 
-            /*
-            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-            Button(
-                onClick = {
-                    val forSave = baseCurrency
-                    baseCurrency = selectedCurrencyForConvert
-                    selectedCurrencyForConvert = forSave
-                },
-
-                modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Swap Currency")
-            }
-             */
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Box(modifier = Modifier.padding(10.dp),
-                contentAlignment = Alignment.Center) {
-                Row() {
-                    DropdownDemo(allCurrencyList){
-                        if(it != Constants.SELECT_CURRENCY_STRING){
-                            selectedCurrencyForConvert = it
-                        }
+                DropdownDemo(allCurrencyList){
+                    if(it != Constants.SELECT_CURRENCY_STRING){
+                        selectedCurrencyForConvert = it
                     }
+                }
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(10.dp))
 
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .width(160.dp)
+                        .background(MaterialTheme.colors.primary)
+                        .padding(10.dp)
+                ) {
                     BasicTextField(
+                        textStyle = androidx.compose.ui.text.TextStyle(
+                            fontSize = 16.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center
+                        ),
                         value = resultForCurrency,
                         onValueChange = {
                             multiplierForConvert = it},
-                        maxLines = 1,
-                        singleLine = true,
                         enabled = false)
                 }
             }
+
+            Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp)
+
         }
     }
 }
@@ -148,21 +167,22 @@ fun DropdownDemo(items:List<String>, onSelect: (String) -> Unit = {}) {
     var expanded by remember { mutableStateOf(false) }
     val disabledValue = "B"
     var selectedIndex by remember { mutableStateOf(0) }
-    Box(contentAlignment = Alignment.Center,
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
-            .wrapContentSize(Alignment.Center)) {
+            .width(160.dp)
+            .background(MaterialTheme.colors.primary)
+            .clickable(onClick = { expanded = true })
+            .padding(10.dp)
+            ) {
         Text(items[selectedIndex],
-            modifier = Modifier
-                .wrapContentSize(Alignment.Center)
-                .clickable(onClick = { expanded = true })
-                .background(MaterialTheme.colors.primary),
             textAlign =  TextAlign.Center,
             color = Color.White)
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .wrapContentSize()
+                .height(300.dp)
                 .background(MaterialTheme.colors.primary)
         ) {
             items.forEachIndexed { index, s ->
