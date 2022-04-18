@@ -24,7 +24,7 @@ Native Android simple currency converter application written in Kotlin using Jet
  
  * Todo ✔️
    * Dark theme ❌
-   * Filtering ❌
+   * Filter currency name ❌
    * Save calculations❌
    
  * Project 
